@@ -1,0 +1,34 @@
+using System;
+
+namespace InventorySystem
+{
+    public class ItemSorterRobot : Robot
+    {
+        public const string UrscriptTemplate = @"
+def move_item_to_shipment_box():
+    SBOX_X = 3 * 0.1
+    SBOX_Y = 3 * 0.1
+    ITEM_X = {0} * 0.1
+    ITEM_Y = 1 * 0.1
+    DOWN_Z = 0.1
+
+    def moveto(x, y, z = 0):
+        movej(p[x, y, z, 0, 3.14, 0], a=1.2, v=0.25)
+
+    moveto(ITEM_X, ITEM_Y)
+    moveto(ITEM_X, ITEM_Y, -DOWN_Z)
+    moveto(ITEM_X, ITEM_Y)
+    moveto(SBOX_X, SBOX_Y)
+    moveto(SBOX_X, SBOX_Y, -DOWN_Z)
+    moveto(SBOX_X, SBOX_Y)
+end
+";
+
+        public void PickUp(uint itemLocation)
+        {
+            var urscript = string.Format(UrscriptTemplate, itemLocation);
+            Console.WriteLine($"Sending URScript for item location {itemLocation}...");
+            SendUrscript(urscript);
+        }
+    }
+}
